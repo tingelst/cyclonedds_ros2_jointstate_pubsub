@@ -33,8 +33,14 @@ int main(int argc, char **argv)
   if (topic < 0)
     DDS_FATAL("dds_create_topic: %s\n", dds_strretcode(-topic));
 
+  const char *partition_name[1];
+  partition_name[0] = "publisher";
+  dds_qos_t *pqos = dds_create_qos();
+  // dds_qset_partition(pqos, 1, partition_name);
+  publisher = dds_create_publisher(participant, pqos, NULL);
+
   /* Create a Writer. */
-  writer = dds_create_writer(participant, topic, NULL, NULL);
+  writer = dds_create_writer(publisher, topic, NULL, NULL);
   if (writer < 0)
     DDS_FATAL("dds_create_writer: %s\n", dds_strretcode(-writer));
 
